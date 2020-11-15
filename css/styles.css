@@ -93,12 +93,13 @@ button {
 }
 
 .show {
-  padding: 15px;
-  border-radius: 10px;
-  margin-left: 5px;
-  margin-right: 5px;
   color: #000;
   background-color: #76CE82;
+  transition: all .2s ease-in-out;
+}
+
+.show:hover {
+  transform: scale(10px);
 }
 
 /* Keyboard */
