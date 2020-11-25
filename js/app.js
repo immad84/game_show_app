@@ -5,11 +5,11 @@ const start = document.querySelector('.btn__reset');
 const tries = document.getElementsByClassName('tries');
 const unOrderedList = document.querySelector('#phrase ul');
 const title = document.querySelector('h2.title');
-var li = [];
 var letterFound;
 var noOfLetters = 0;
 var noOfLettersShown = 0;
 var missed = 0;
+
 var phrases = ['A bird in hand',
 'A strong chain',
 'A diamond is forever',
@@ -28,26 +28,24 @@ function getRandomPhraseAsArray(arr){
  
 function addPhraseToDisplay(arr){
     for(let i = 0 ; i < arr.length ; i++){
-        li.push(document.createElement('li')); 
-        li[i].textContent = arr[i];
-        if(li[i].textContent !== " "){
-            li[i].className = "letter";
+        let li = document.createElement('li');
+        li.textContent = arr[i];
+        if(li.textContent !== " "){
+            li.className = "letter";
             noOfLetters++;
         }else {
-            li[i].className = "space";
+            li.className = "space";
         }
-        unOrderedList.appendChild(li[i]);
+        unOrderedList.appendChild(li);
     }
 }
 
-addPhraseToDisplay(getRandomPhraseAsArray(phrases));
-
 function checkLetter (btn) {
     let match = " ";
-    for(let i = 0 ; i < li.length ; i++){
-        if(li[i].className === "letter"){
-            if(li[i].textContent.toUpperCase() === btn.textContent.toUpperCase()){
-                li[i].className += " show";
+    for(let i = 0 ; i < unOrderedList.children.length ; i++){
+        if(unOrderedList.children[i].className === "letter"){
+            if(unOrderedList.children[i].textContent.toUpperCase() === btn.textContent.toUpperCase()){
+                unOrderedList.children[i].className += " show";
                 noOfLettersShown++;
                 match = btn.textContent;
             }
@@ -61,44 +59,61 @@ function checkLetter (btn) {
     }
 }
 
+function resetGame () {
+    const btn = document.querySelectorAll(".keyrow button");
+    unOrderedList.innerHTML = "";
+    for(let i = 0 ; i < btn.length ; i++){
+        btn[i].classList.remove('chosen');
+        btn[i].disabled = false;
+    }
+    for(let i = 0 ; i < tries.length ; i++){
+        tries[i].style.display = "";
+    }
+    addPhraseToDisplay(getRandomPhraseAsArray(phrases));
+    overlay.style.display = 'none';
+}
+
 function checkWin () {
     if(noOfLettersShown === noOfLetters){
-        overlay.className = "win";
-        overlay.style.display = "flex";
-        title.textContent = "You Won !";
-        start.textContent = "Play Again";
-        start.className += " again";
+        setTimeout(function(){
+            overlay.className = "win";
+            overlay.style.display = "";
+            title.textContent = "You Won !";
+            start.textContent = "Play Again";
+            start.className += " again";
+        }, 1000);
     }
     else if(missed === 5){
-        overlay.className = "lose";
-        overlay.style.display = "flex";
-        title.textContent = "You Lose !";
-        start.textContent = "Play Again";
-        start.className += " again";
+        setTimeout(function(){
+            overlay.className = "lose";
+            overlay.style.display = "";
+            title.textContent = "You Lose !";
+            start.textContent = "Play Again";
+            start.className += " again";
+        }, 1000);
     }
 }
 
 start.addEventListener('click', function() {
     if(start.textContent !== "Play Again") {
+        addPhraseToDisplay(getRandomPhraseAsArray(phrases));
         overlay.style.display = 'none';
-    } else {
+    } 
+    else {
         missed = 0;
-        if(missed === 0){
-            for(let i = 0 ; i < tries.length ; i++){
-                tries[i].style.display = "inline";
-                overlay.style.display = 'none';
-            }
-        }
+        resetGame();
     }
 });
 
 qwerty.addEventListener('click', function(event) {
     if(event.target.tagName === 'button'.toUpperCase()) {
-        event.target.className = 'chosen';
         letterFound = checkLetter(event.target);
+        event.target.disabled = true;
+        event.target.className = 'chosen';
         if(letterFound === null){
             tries[missed].style.display = "none";
             missed++;
+            
         }
         checkWin();
     }
