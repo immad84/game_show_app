@@ -36,11 +36,6 @@ ul {
   display: inline-block;
 }
 
-/* ul li {
-  border-radius: ;
-  transition: background-color 2s;
-} */
-
 h2 {
   margin: 0;
   text-transform: uppercase;
@@ -84,8 +79,8 @@ button {
 
 /* Phrase */
 
-  .letter {
-  font-size: var(--font-size-medium); 
+.letter {
+  font-size: var(--font-size-medium);
   height: 65px;
   width: 65px;
   padding: 20px 1px 0 1px;
@@ -93,7 +88,7 @@ button {
   color: transparent;
   background: var(--color-neutral-light);
   border-radius: 5px;
-  transition: border-radius 0.3s;
+  transition-duration: 1s;
 }
 
 .space {
@@ -103,7 +98,7 @@ button {
 .show {
   color: #000;
   background-color: #76ce82;
-  transition: all 0.2s ease-in-out;
+  border-radius: 1em;
 }
 
 /* Keyboard */
@@ -116,7 +111,7 @@ button {
 .chosen {
   background: var(--color-neutral);
   border-radius: 5px;
-  font-size: var(--font-size-medium);  
+  font-size: var(--font-size-medium);
   color: #ffffff;
 }
 
