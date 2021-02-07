@@ -43,6 +43,9 @@ function addPhraseToDisplay(arr){
 
 
 function resetGame () {
+    missed = 0;
+    noOfLettersShown = 0; 
+    noOfLetters = 0;
     const btn = document.querySelectorAll(".keyrow button");
     unOrderedList.innerHTML = "";
     for(let i = 0 ; i < btn.length ; i++){
@@ -62,9 +65,6 @@ start.addEventListener('click', function() {
         overlay.style.display = 'none';
     } 
     else if (start.textContent === 'Play Again'){
-        missed = 0;
-        noOfLettersShown = 0; 
-        noOfLetters = 0;
         resetGame();
     }
 });
