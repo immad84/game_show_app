@@ -24,7 +24,6 @@ let getRandomPhraseAsArray = arr => {
     for(let i = 0 ; i < str.length ; i++){
         arrayOfCharacters.push(str.charAt(i));
     }
-    console.log(arrayOfCharacters);
     return arrayOfCharacters;
 } 
  
@@ -42,25 +41,6 @@ function addPhraseToDisplay(arr){
     }
 }
 
-function checkLetter (btn) {
-    let match = null;
-    let lis = unOrderedList.children;
-    for(let i = 0 ; i < lis.length ; i++){
-        if(lis[i].className === "letter"){
-            if(lis[i].textContent.toUpperCase() === btn.textContent.toUpperCase()){
-                lis[i].className += " show";
-                noOfLettersShown++;
-                match = btn.textContent;
-            }
-        }
-    }
-    if(match === " "){
-        match = null;
-        return match;
-    }else {
-        return match;
-    }
-}
 
 function resetGame () {
     const btn = document.querySelectorAll(".keyrow button");
@@ -76,30 +56,15 @@ function resetGame () {
     overlay.style.display = 'none';
 }
 
-function checkWin () {
-    if(noOfLettersShown === noOfLetters){
-        overlay.className = "win";
-        overlay.style.display = "";
-        title.textContent = "You Won !";
-        start.textContent = "Play Again";
-        start.className += " again";
-    }
-    else if(missed > 4){
-        overlay.className = "lose";
-        overlay.style.display = "";
-        title.textContent = "You Lose !";
-        start.textContent = "Play Again";
-        start.className += " again";
-    }
-}
-
 start.addEventListener('click', function() {
     if(start.textContent === "Start Game") {
         addPhraseToDisplay(getRandomPhraseAsArray(phrases));
         overlay.style.display = 'none';
     } 
-    else {
+    else if (start.textContent === 'Play Again'){
         missed = 0;
+        noOfLettersShown = 0; 
+        noOfLetters = 0;
         resetGame();
     }
 });
@@ -118,6 +83,34 @@ qwerty.addEventListener('click', function(event) {
     }
 });
 
+function checkLetter (btn) {
+    let match = null;
+    let lis = unOrderedList.children;
+    for(let i = 0 ; i < lis.length ; i++){
+        if(lis[i].className === "letter"){
+            if(lis[i].textContent.toUpperCase() === btn.textContent.toUpperCase()){
+                lis[i].className += " show";
+                noOfLettersShown++;
+                match = btn.textContent;
+            }
+        }
+    }
+    return match;
+}
 
+function checkWin () {
+    if(noOfLettersShown === noOfLetters){
+        winLoose('win');
+    }
+    else if(missed > 4){
+        winLoose('lose');
+    }
+}
+
+function winLoose(message) {
+    overlay.className = message;
+    overlay.style.display = "flex";
+    start.textContent = "Play Again";
+}
 
 
