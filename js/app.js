@@ -1,6 +1,6 @@
 const qwerty = document.getElementById('qwerty');
 const phrase = document.getElementById('phrase');
-const overlay =document.querySelector('.start');
+const overlay = document.querySelector('.start');
 const start = document.querySelector('.btn__reset');
 const tries = document.getElementsByClassName('tries');
 const unOrderedList = document.querySelector('#phrase ul');
@@ -10,19 +10,21 @@ var noOfLetters = 0;
 var noOfLettersShown = 0;
 var missed = 0;
 
-var phrases = ['A bird in hand',
-'A strong chain',
+var phrases = ['Better late than never',
+'Call it a day',
 'A diamond is forever',
-'A drop in the bucket',
-'A fish out of water'];
+'Break a leg',
+'Cut somebody some slack',
+'Get your act together'];
 
-function getRandomPhraseAsArray(arr){
+let getRandomPhraseAsArray = arr => {
     let randomPhraseIndex = Math.floor(Math.random() * arr.length);
     let str = arr[randomPhraseIndex];
     let arrayOfCharacters = [];
     for(let i = 0 ; i < str.length ; i++){
         arrayOfCharacters.push(str.charAt(i));
     }
+    console.log(arrayOfCharacters);
     return arrayOfCharacters;
 } 
  
@@ -30,22 +32,23 @@ function addPhraseToDisplay(arr){
     for(let i = 0 ; i < arr.length ; i++){
         let li = document.createElement('li');
         li.textContent = arr[i];
-        if(li.textContent !== " "){
+        if(li.textContent === " "){
+            li.className = "space";
+        }else {
             li.className = "letter";
             noOfLetters++;
-        }else {
-            li.className = "space";
         }
         unOrderedList.appendChild(li);
     }
 }
 
 function checkLetter (btn) {
-    let match = " ";
-    for(let i = 0 ; i < unOrderedList.children.length ; i++){
-        if(unOrderedList.children[i].className === "letter"){
-            if(unOrderedList.children[i].textContent.toUpperCase() === btn.textContent.toUpperCase()){
-                unOrderedList.children[i].className += " show";
+    let match = null;
+    let lis = unOrderedList.children;
+    for(let i = 0 ; i < lis.length ; i++){
+        if(lis[i].className === "letter"){
+            if(lis[i].textContent.toUpperCase() === btn.textContent.toUpperCase()){
+                lis[i].className += " show";
                 noOfLettersShown++;
                 match = btn.textContent;
             }
@@ -75,27 +78,23 @@ function resetGame () {
 
 function checkWin () {
     if(noOfLettersShown === noOfLetters){
-        setTimeout(function(){
-            overlay.className = "win";
-            overlay.style.display = "";
-            title.textContent = "You Won !";
-            start.textContent = "Play Again";
-            start.className += " again";
-        }, 1000);
+        overlay.className = "win";
+        overlay.style.display = "";
+        title.textContent = "You Won !";
+        start.textContent = "Play Again";
+        start.className += " again";
     }
-    else if(missed === 5){
-        setTimeout(function(){
-            overlay.className = "lose";
-            overlay.style.display = "";
-            title.textContent = "You Lose !";
-            start.textContent = "Play Again";
-            start.className += " again";
-        }, 1000);
+    else if(missed > 4){
+        overlay.className = "lose";
+        overlay.style.display = "";
+        title.textContent = "You Lose !";
+        start.textContent = "Play Again";
+        start.className += " again";
     }
 }
 
 start.addEventListener('click', function() {
-    if(start.textContent !== "Play Again") {
+    if(start.textContent === "Start Game") {
         addPhraseToDisplay(getRandomPhraseAsArray(phrases));
         overlay.style.display = 'none';
     } 
@@ -106,14 +105,14 @@ start.addEventListener('click', function() {
 });
 
 qwerty.addEventListener('click', function(event) {
-    if(event.target.tagName === 'button'.toUpperCase()) {
-        letterFound = checkLetter(event.target);
-        event.target.disabled = true;
-        event.target.className = 'chosen';
+    let btn = event.target;
+    if(btn.tagName === 'button'.toUpperCase()) {
+        letterFound = checkLetter(btn);
+        btn.disabled = true;
+        btn.className = 'chosen';
         if(letterFound === null){
             tries[missed].style.display = "none";
-            missed++;
-            
+            missed++; 
         }
         checkWin();
     }
